@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://desibooknook.harleenbhullar0.workers.dev/
