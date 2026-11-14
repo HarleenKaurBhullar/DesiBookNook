@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://desibooknook.harleenbhullar0.workers.dev/
+Sitemap: https://desibooknook.desibooknook.workers.dev/

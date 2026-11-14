@@ -1,7 +1,8 @@
+
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://desibooknook.harleenbhullar0.workers.dev/',
+  site: 'https://desibooknook.desibooknook.workers.dev',
   integrations: [sitemap()],
 });
