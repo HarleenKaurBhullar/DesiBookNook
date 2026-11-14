@@ -1,0 +1,157 @@
+---
+// The home page shelf: each book is a clickable spine.
+// The last one leans on its neighbour, because a perfectly neat shelf is boring.
+interface Spine {
+  id: string;
+  title: string;
+  author: string;
+}
+
+interface Props {
+  books: Spine[];
+}
+
+const { books } = Astro.props;
+const shown = books.slice(0, 8);
+
+const widths = [84, 64, 96, 72, 88, 60, 100, 70];
+const heights = [300, 276, 332, 290, 318, 268, 340, 284];
+const palette = [
+  { bg: 'var(--cobalt)', fg: '#ffffff' },
+  { bg: 'var(--tangerine)', fg: 'var(--ink)' },
+  { bg: 'var(--mint)', fg: 'var(--ink)' },
+  { bg: 'var(--lemon)', fg: 'var(--ink)' },
+  { bg: 'var(--pink)', fg: 'var(--ink)' },
+  { bg: 'var(--ink)', fg: 'var(--lemon)' },
+];
+
+const leaning = shown.length >= 4 ? shown.length - 1 : -1;
+---
+
+{
+  shown.length > 0 && (
+    <>
+      <ul class="shelf" aria-label="Books on the shelf">
+        {shown.map((book, i) => {
+          const colors = palette[i % palette.length];
+          const lean = i === leaning;
+          const w = lean ? 64 : widths[i];
+          const h = lean ? 250 : heights[i];
+          return (
+            <li class:list={['slot', { lean }]} style={`--i:${i}`}>
+              <a
+                class="spine"
+                href={`/books#${book.id}`}
+                aria-label={`${book.title} by ${book.author}`}
+                style={`--w:${w}px;--h:${h}px;--bg:${colors.bg};--fg:${colors.fg}`}
+              >
+                <span class="title">{book.title}</span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <div class="plank" aria-hidden="true" />
+    </>
+  )
+}
+
+<style>
+  .shelf {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    margin: 0;
+    padding: 30px 12px 0;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .slot {
+    display: flex;
+    flex: none;
+    align-items: flex-end;
+  }
+
+  /* Leaning: tilt 14 degrees, and push it right so its top corner touches the neighbour */
+  .slot.lean {
+    margin-left: calc(250px * 0.242 + 4px);
+  }
+
+  .spine {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: var(--w);
+    height: var(--h);
+    padding: 44px 0 20px;
+    overflow: hidden;
+    color: var(--fg);
+    text-decoration: none;
+    background-color: var(--bg);
+    /* Two stripes near the top and bottom, like a printed spine */
+    background-image:
+      linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor),
+      linear-gradient(currentColor, currentColor), linear-gradient(currentColor, currentColor);
+    background-size: 100% 3px;
+    background-position:
+      0 14px,
+      0 22px,
+      0 calc(100% - 14px),
+      0 calc(100% - 22px);
+    background-repeat: no-repeat;
+    border: 2.5px solid var(--ink);
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+    transition: translate 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+  }
+
+  .spine:hover,
+  .spine:focus-visible {
+    translate: 0 -16px;
+  }
+
+  .lean .spine {
+    rotate: -14deg;
+    transform-origin: bottom left;
+  }
+
+  .title {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    font-family: var(--font-display);
+    font-weight: 750;
+    font-stretch: 85%;
+    font-size: 1.3rem;
+    line-height: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    writing-mode: vertical-rl;
+  }
+
+  /* One orchestrated moment: the shelf fills up left to right on load */
+  @media (prefers-reduced-motion: no-preference) {
+    .spine {
+      animation: rise 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.2) backwards;
+      animation-delay: calc(var(--i) * 70ms + 150ms);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      translate: 0 70px;
+      opacity: 0;
+    }
+  }
+
+  .plank {
+    height: 18px;
+    margin-inline: -8px;
+    background: var(--ink);
+    border-radius: 4px;
+    box-shadow: 0 8px 0 var(--paper-deep);
+  }
+</style>

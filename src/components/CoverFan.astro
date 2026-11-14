@@ -1,0 +1,72 @@
+---
+// Up to three covers fanned out like a hand of cards.
+// Decorative only, so it is hidden from screen readers.
+interface Props {
+  covers: string[];
+  width?: number;
+}
+
+const { covers, width = 110 } = Astro.props;
+const shown = covers.slice(0, 3);
+---
+
+<div class="fan" style={`--w:${width}px`} aria-hidden="true">
+  {
+    shown.map((src, i) => (
+      <span class={`cover item i${i}`}>
+        <img src={src} alt="" width="300" height="450" loading="lazy" />
+      </span>
+    ))
+  }
+</div>
+
+<style>
+  .fan {
+    display: flex;
+    width: max-content;
+    padding: 12px 18px 12px 4px;
+  }
+
+  .item {
+    flex: none;
+    width: var(--w);
+    transition:
+      translate 0.25s cubic-bezier(0.3, 1.5, 0.5, 1),
+      rotate 0.25s cubic-bezier(0.3, 1.5, 0.5, 1);
+  }
+
+  .item + .item {
+    margin-left: calc(var(--w) * -0.6);
+  }
+
+  /* First book sits on top */
+  .i0 {
+    z-index: 3;
+    rotate: -5deg;
+  }
+  .i1 {
+    z-index: 2;
+    rotate: 2deg;
+  }
+  .i2 {
+    z-index: 1;
+    rotate: 8deg;
+  }
+
+  /* Spread out when the link around the fan is hovered or focused */
+  :global(a:hover) .i0,
+  :global(a:focus-visible) .i0 {
+    translate: -6px 0;
+    rotate: -9deg;
+  }
+  :global(a:hover) .i1,
+  :global(a:focus-visible) .i1 {
+    translate: 6px -6px;
+    rotate: 3deg;
+  }
+  :global(a:hover) .i2,
+  :global(a:focus-visible) .i2 {
+    translate: 18px 0;
+    rotate: 13deg;
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPostsWithBooks } from '../../lib/content';
+
+const entries = await getPostsWithBooks();
+---
+
+<BaseLayout title="Lists" description="Every reading list on Dog-Eared, newest first.">
+  <section class="wrap page-head">
+    <h1>Lists</h1>
+    <p class="dek">Every reading list, newest first. Open one to see the books and why they made it.</p>
+  </section>
+
+  <section class="wrap list">
+    {
+      entries.length > 0 ? (
+        <div class="post-list">
+          {entries.map(({ post, books }) => (
+            <PostCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              href={`/blog/${post.id}`}
+              covers={books.filter((b) => b !== undefined).map((b) => b.data.cover)}
+              count={books.length}
+            />
+          ))}
+        </div>
+      ) : (
+        <p>No lists yet. Add a Markdown file to src/content/posts to publish your first one.</p>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .list {
+    padding-top: 1.5rem;
+  }
+</style>

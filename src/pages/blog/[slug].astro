@@ -1,0 +1,31 @@
+---
+import { getEntries, render } from 'astro:content';
+import PostLayout from '../../layouts/PostLayout.astro';
+import { getPublishedPosts } from '../../lib/content';
+
+// One page per post. The slug is the post's file name, e.g.
+// src/content/posts/top-5-books-2025.md  ->  /blog/top-5-books-2025
+export async function getStaticPaths() {
+  const posts = await getPublishedPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+
+// Turn the list of book ids in the post into the full book entries
+const books = await getEntries(post.data.books);
+const { Content } = await render(post);
+---
+
+<PostLayout
+  title={post.data.title}
+  description={post.data.description}
+  date={post.data.date}
+  books={books}
+  ranked={post.data.ranked}
+>
+  <Content />
+</PostLayout>

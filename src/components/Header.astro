@@ -1,0 +1,105 @@
+---
+import { NAV_LINKS, SITE_TITLE } from '../consts';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="logo" aria-label={`${SITE_TITLE}, home`}>
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+        <path
+          d="M3 3h18l6 6v18H3z"
+          fill="var(--tangerine)"
+          stroke="var(--ink)"
+          stroke-width="2.5"
+          stroke-linejoin="round"></path>
+        <path
+          d="M21 3v6h6"
+          fill="var(--lemon)"
+          stroke="var(--ink)"
+          stroke-width="2.5"
+          stroke-linejoin="round"></path>
+      </svg>
+      <span>{SITE_TITLE}</span>
+    </a>
+
+    <nav aria-label="Main">
+      <ul>
+        {
+          NAV_LINKS.map((link) => (
+            <li>
+              <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: var(--paper);
+    border-bottom: var(--line);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+    padding-block: 0.9rem;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-stretch: 85%;
+    font-size: 1.6rem;
+    letter-spacing: -0.03em;
+    text-decoration: none;
+  }
+
+  .logo svg {
+    transition: rotate 0.25s cubic-bezier(0.3, 1.6, 0.5, 1);
+  }
+
+  .logo:hover svg {
+    rotate: -10deg;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  nav a {
+    padding-block: 0.35rem;
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-decoration: none;
+    background: linear-gradient(var(--tangerine), var(--tangerine)) left bottom / 0 0.22em no-repeat;
+    transition: background-size 0.2s ease;
+  }
+
+  nav a:hover,
+  nav a[aria-current='page'] {
+    background-size: 100% 0.22em;
+  }
+</style>

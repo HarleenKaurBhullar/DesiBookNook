@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found">
+  <section class="wrap page-head">
+    <h1>Not on the shelf</h1>
+    <p class="dek">We could not find that page. It may have moved, or the link may have a typo.</p>
+    <p class="actions">
+      <a class="btn" href="/">Go to the home page</a>
+      <a class="text-link" href="/blog">Browse all lists</a>
+    </p>
+  </section>
+</BaseLayout>
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+    margin-top: 2rem;
+  }
+</style>

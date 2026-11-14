@@ -1,0 +1,330 @@
+/* Dog-Eared: global styles
+   Tokens first, then the few shared pieces (covers, buttons, chips, prose).
+   Everything else lives inside the component that uses it. */
+
+:root {
+  /* Colour */
+  --paper: #ece8fa;
+  --paper-deep: #ddd6f3;
+  --ink: #16133a;
+  --ink-soft: #4a466e;
+  --cobalt: #3730d9;
+  --tangerine: #ff7a2f;
+  --mint: #a8ebd0;
+  --pink: #ffb3d1;
+  --lemon: #ffe56b;
+
+  /* Type */
+  --font-display: 'Bricolage Grotesque', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --font-text: 'Literata', Georgia, 'Times New Roman', serif;
+
+  /* Layout */
+  --wrap: 1120px;
+  --measure: 760px;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --line: 2px solid var(--ink);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 750;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: var(--cobalt);
+  text-decoration-thickness: 0.1em;
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--lemon);
+  color: var(--ink);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Layout helpers ---------- */
+
+.wrap {
+  width: min(var(--wrap), calc(100% - 2 * var(--gutter)));
+  margin-inline: auto;
+}
+
+.measure {
+  max-width: var(--measure);
+}
+
+.skip {
+  position: absolute;
+  top: -4rem;
+  left: 1rem;
+  z-index: 10;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: var(--lemon);
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+.skip:focus {
+  top: 1rem;
+  color: var(--lemon);
+}
+
+.section {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-head h2 {
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
+}
+
+.text-link {
+  font-family: var(--font-display);
+  font-weight: 650;
+}
+
+/* Title block used by list pages (Lists, Books, About, 404) */
+.page-head {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem) 1.5rem;
+}
+
+.page-head h1 {
+  font-size: clamp(3rem, 9vw, 6rem);
+  font-weight: 800;
+  font-stretch: 82%;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+}
+
+.dek {
+  max-width: 38ch;
+  margin: 1.25rem 0 0;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* ---------- Shared pieces ---------- */
+
+/* A book cover: thick ink edge, offset shadow, and a binding crease on the left */
+.cover {
+  position: relative;
+  display: block;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: var(--paper-deep);
+  border: 2px solid var(--ink);
+  border-radius: 3px 7px 7px 3px;
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cover::after {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 9px;
+  background: linear-gradient(90deg, rgb(0 0 0 / 0.24), rgb(255 255 255 / 0.2) 45%, transparent);
+  pointer-events: none;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.4rem;
+  background: var(--ink);
+  color: var(--lemon);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.2;
+  text-decoration: none;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--tangerine);
+  transition:
+    translate 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.btn:hover {
+  color: var(--lemon);
+  translate: 2px 2px;
+  box-shadow: 1px 1px 0 var(--tangerine);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.8rem;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1;
+  text-decoration: none;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+a.chip:hover,
+button.chip:hover {
+  background: var(--lemon);
+  color: var(--ink);
+}
+
+button.chip[aria-pressed='true'] {
+  background: var(--ink);
+  color: var(--lemon);
+}
+
+.pill {
+  display: inline-block;
+  padding: 0.3rem 0.65rem;
+  background: var(--lemon);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  line-height: 1;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+}
+
+/* A stack of PostCards, separated by ink rules */
+.post-list {
+  border-bottom: var(--line);
+}
+
+/* ---------- Markdown content ---------- */
+
+.prose {
+  font-size: 1.125rem;
+  line-height: 1.75;
+}
+
+.prose p {
+  margin: 0 0 1.1em;
+}
+
+.prose h2,
+.prose h3 {
+  margin: 1.8em 0 0.6em;
+}
+
+.prose h2 {
+  font-size: 1.75rem;
+}
+
+.prose h3 {
+  font-size: 1.3rem;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+  margin: 0 0 1.1em;
+}
+
+.prose li + li {
+  margin-top: 0.3em;
+}
+
+.prose blockquote {
+  margin: 1.5em 0;
+  padding: 0.25em 0 0.25em 1.25em;
+  border-left: 6px solid var(--tangerine);
+  font-style: italic;
+}
+
+.prose strong {
+  font-weight: 700;
+}
+
+.prose hr {
+  margin: 2em 0;
+  border: 0;
+  border-top: var(--line);
+}
