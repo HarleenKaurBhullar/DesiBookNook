@@ -1,7 +1,7 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
 export default defineConfig({
-  // When you deploy, set your real address so canonical links work:
-  // site: 'https://your-blog.example.com',
+  site: 'https://desibooknook.harleenbhullar0.workers.dev/',
+  integrations: [sitemap()],
 });
